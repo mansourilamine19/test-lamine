@@ -1,0 +1,62 @@
+# Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/doc/setup.md
+fos_elastica:
+    clients:
+        default: { url: '%env(ELASTICSEARCH_URL)%' }
+    indexes:
+        user:
+            properties:
+                username: ~
+                email: ~
+                password: ~
+                isActive: ~
+            persistence:
+                driver: orm
+                model: App\Entity\User
+                repository: App\Repository\UserRepository
+                finder: ~
+                provider: ~
+                listener: ~
+        country:
+            properties:
+                iso: ~
+                name: ~
+                nicename: ~
+                iso3: ~
+                numcode: ~
+                phonecode: ~
+            persistence:
+                driver: orm
+                model: App\Entity\Country
+                repository: App\Repository\CountryRepository
+                finder: ~
+                provider: ~
+                listener: ~
+        city:
+            properties:
+                country: ~
+                region: ~
+                name: ~
+                latitude: ~
+                longitude: ~
+            persistence:
+                driver: orm
+                model: App\Entity\City
+                repository: App\Repository\CityRepository
+                finder: ~
+                provider: ~
+                listener: ~
+        region:
+            properties:
+                country: ~
+                code: ~
+                name: ~
+                latitude: ~
+                longitude: ~
+                city: ~
+            persistence:
+                driver: orm
+                model: App\Entity\Region
+                repository: App\Repository\RegionRepository
+                finder: ~
+                provider: ~
+                listener: ~

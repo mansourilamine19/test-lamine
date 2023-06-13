@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MovieController!{% endblock %}
+
+{% block body %}
+    {{ render(controller(
+        'App\\Controller\\MovieController::list',
+        { 'max': 3 }
+    )) }}
+
+    <div class="modal" id="modalAjaxLoading" style="display: none">
+        <div class="center">
+            <img alt="" src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif"/>
+        </div>
+    </div>
+
+    {#     Modal de détail movie #}
+    <!-- Button trigger modal -->
+    <div class="bs-example">
+        <!-- Button HTML (to Trigger Modal) -->
+        <button type="button" class="btn btn-lg btn-primary">Show Modal</button>
+
+        <!-- Modal HTML -->
+        <div id="myModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal Title</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function detailMovie(id) {
+            $.ajax({
+                method: "POST",
+                url: "{{ path('detail_movie') }}",
+                data: {id: id},
+                success: function (data) {
+                    $("#modal-body").html("");
+                    $("#modal-body").append(data);
+                    $("#myModal").modal('show');
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            $('#ajax-loading').hide();
+            $(".form-check-input").click(function () {
+                $('.form-check-input:checked').each(function () {
+                    $("#modalAjaxLoading").show();
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ path('render_controller_list_movies') }}",
+                        data: {
+                            with_genres: $(this).val()
+                        },
+                        success: function (data) {
+                            $("#listMovies").html("");
+                            $("#listMovies").append(data);
+                            $("#modalAjaxLoading").hide();
+                        }
+                    });
+                });
+            });
+        });
+
+        //search
+        $('#input-datalist').keyup(function () {
+            $('#ajax-loading').hide();
+            $("#modalAjaxLoading").show();
+            $.ajax({
+                method: "POST",
+                url: "{{ path('render_controller_list_movies') }}",
+                data: {
+                    with_genres: $(this).val()
+                },
+                success: function (data) {
+                    $("#listMovies").html("");
+                    $("#listMovies").append(data);
+                    $("#modalAjaxLoading").hide();
+                }
+            });
+
+        });
+
+    </script>
+{% endblock %}

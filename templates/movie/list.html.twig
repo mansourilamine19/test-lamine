@@ -1,0 +1,46 @@
+{% if genres is not empty %}
+    <div class="form-group">
+        <label for="input-datalist">Search</label>
+        <input type="search" class="form-control" placeholder="search" list="list-timezone" id="input-datalist">
+        <datalist id="list-timezone">
+            {% for genre in genres.genres %}
+                <option value="{{ genre.name }}">{{ genre.name }}</option>
+            {% endfor %}
+        </datalist>
+    </div>
+{% endif %}
+<div class="row flex-row">
+    <div class="col-md-2">
+        {% if genres is not empty %}
+            {% for genre in genres.genres %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="genre[]" value="{{ genre.name }}"
+                           id="{{ genre.id }}">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        {{ genre.name }}
+                    </label>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="col-md-10" id="listMovies">
+        {% for movie in movies.results %}
+            <div class="row" style="padding: 2%;">
+                <div class="col-md-1">
+                    <img src="{{ baseUrlImages ~ movie.poster_path }}" class="img-rounded" alt="{{ movie.title }}">
+                </div>
+                <div class="col-md-9" style="padding-left: 20%">
+                    <strong> {{ movie.title }}</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)<br>
+                    {{ movie.release_date|date("Y") }}<br>
+                    {{ movie.overview }}
+                    <button class="btn btn-primary position-absolute bottom-0 end-0" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                            aria-controls="collapseExample"
+                            onclick=detailMovie({{ movie.id }})>
+                        Lire le détails
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
